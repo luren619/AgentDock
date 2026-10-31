@@ -1,0 +1,60 @@
+import { type Static, Type } from "typebox";
+import { Value } from "typebox/value";
+import { apiRequest } from "../../../api/request";
+
+const AuthSessionResponseSchema = Type.Union([
+  Type.Object({ authenticated: Type.Literal(false) }),
+  Type.Object({
+    authenticated: Type.Literal(true),
+    user: Type.Object({
+      id: Type.String({ minLength: 1 }),
+      username: Type.String({ minLength: 1 }),
+      displayName: Type.Union([Type.String({ minLength: 1 }), Type.Null()]),
+      avatarUrl: Type.String({ format: "uri" }),
+      profileUrl: Type.String({ format: "uri" }),
+    }),
+  }),
+]);
+
+export type AuthSessionResponse = Static<typeof AuthSessionResponseSchema>;
+
+async function fetchJson(url: string): Promise<unknown> {
+  const response = await fetch(url, {
+    credentials: "same-origin",
+    headers: {
+      Accept: "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`请求失败，状态码：${response.status}`);
+  }
+
+  return response.json();
+}
+
+export async function getAuthSession(): Promise<AuthSessionResponse> {
+  const body = await fetchJson("/api/auth/session");
+  if (!Value.Check(AuthSessionResponseSchema, body)) {
+    throw new Error("daemon 返回了无效的登录会话响应");
+  }
+  return body;
+}
+
+export async function startDesktopGitHubLogin(signal: AbortSignal): Promise<void> {
+  await apiRequest("/api/auth/github/desktop", { method: "POST", signal });
+}
+
+export async function logout(): Promise<void> {
+  const response = await fetch("/api/auth/logout", {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+      "X-AgentDock-Request": "1",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`请求失败，状态码：${response.status}`);
+  }
+}

@@ -1,0 +1,56 @@
+vercel:
+  port: 4000
+  users:
+    - username: developer
+      name: Developer
+      email: developer@example.com
+  projects:
+    - name: web-app
+      framework: nextjs
+  integrations:
+    - client_id: agentdock-local
+      client_secret: agentdock-local-secret
+      name: AgentDock Local Skills
+      redirect_uris:
+        - http://127.0.0.1:4310/api/skill-connections/vercel/oauth/callback
+
+github:
+  port: 4001
+  users:
+    - login: octocat
+      name: The Octocat
+      email: octocat@github.com
+  repos:
+    - owner: octocat
+      name: hello-world
+      description: Local GitHub OAuth and Skill gateway fixture
+      language: TypeScript
+      auto_init: true
+  oauth_apps:
+    - client_id: agentdock-local
+      client_secret: agentdock-local-secret
+      name: AgentDock Local Skills
+      redirect_uris:
+        - http://127.0.0.1:4310/api/skill-connections/github/oauth/callback
+
+google:
+  port: 4002
+  users:
+    - email: developer@example.com
+      name: Developer
+  oauth_clients:
+    - client_id: agentdock-local
+      client_secret: agentdock-local-secret
+      redirect_uris:
+        - http://127.0.0.1:4310/api/skill-connections/google/oauth/callback
+  calendars:
+    - id: primary
+      user_email: developer@example.com
+      summary: developer@example.com
+      primary: true
+  drive_items:
+    - id: drv_docs
+      user_email: developer@example.com
+      name: Docs
+      mime_type: application/vnd.google-apps.folder
+      parent_ids: [root]

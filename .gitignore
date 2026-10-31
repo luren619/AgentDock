@@ -1,0 +1,34 @@
+node_modules/
+dist/
+!hero-ui-pro/dist/
+!hero-ui-pro/dist/**
+coverage/
+*.tsbuildinfo
+
+*.db
+*.db-shm
+*.db-wal
+.agentdock/
+.env
+.env.enc.*.tmp
+
+.DS_Store
+.idea/
+.vscode/
+packages/computer-use/native/target
+apps/desktop/src-tauri/target
+apps/desktop/src-tauri/gen/schemas
+apps/desktop/src-tauri/binaries/agentdock-node-*
+apps/desktop/src-tauri/binaries/agentdock-computer-use-helper-*
+apps/desktop/src-tauri/resources/daemon/
+
+# Local credentials and encrypted backups
+.env.key
+.env.enc
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Local documentation
+/docs/
